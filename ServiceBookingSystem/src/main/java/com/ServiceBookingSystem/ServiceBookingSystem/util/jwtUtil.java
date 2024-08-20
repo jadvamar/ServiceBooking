@@ -8,14 +8,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
-import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class jwtUtil {
+public class JwtUtil {
     public static final String SECRET = "5367871dfc54cv6787we7dc74982dsf9df763de8h6k25666q335r5849";
 
     private  String createTocken(Map<String,Object> calims, String userName ){
