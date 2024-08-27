@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.ResourceBundle;
 
 @RestController
 public class AuthenticationController {
@@ -61,11 +62,13 @@ public class AuthenticationController {
         if(authService.presentByEmail(signupRequestDTO.getEmail())){
             return new ResponseEntity<>("client already exist" , HttpStatus.NOT_ACCEPTABLE);
         }
-        UserDto createUSer = authService.signupClient(signupRequestDTO);
+        UserDto createUSer = authService.signupCompany(signupRequestDTO);
         return new ResponseEntity<>(createUSer,HttpStatus.OK);
     }
 
-    public  void CreateAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws JSONException, IOException {
+    @PostMapping("/authenticate")
+    public  void CreateAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest,
+                                           HttpServletResponse response) throws JSONException, IOException {
         try{
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()
@@ -84,5 +87,13 @@ public class AuthenticationController {
                 .put("userId",user.getId())
                 .put("role",user.getRole())
                 .toString());
+
+        response.addHeader("Access-Control-Expose-Header", "Autherization");
+        response.addHeader("Access-Control-Allow-Header", "Autherization" + "X-PINGOTHER, Origin , X-Request-With, Content-Type, Accept, X-Custome-header");
+
+        response.addHeader(HEADER_STRING,TOKEN_PREFIX + jwt);
     }
+
+
+
 }
